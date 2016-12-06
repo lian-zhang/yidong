@@ -1,21 +1,17 @@
-/*去掉标签的默认的样式*/
-body,h1,h2,h3,h4,h5,h6,p,pre,ol,ul,li,form,input,textarea,dl,dt,dd
-{
-   margin:0;
-   padding:0;
-}
+/* 鍘绘帀鏍囩鐨勯粯璁ょ殑鏍峰紡 */
+body,h1,h2,h3,h4,h5,h6,p,pre,ol,ul,li,form,input,textarea,dl,dt,dd{
+  margin:0;
+  padding:0;
+} 
 ul,ol{
-   list-style:none;
+  list-style:none;
 }
 a{
-   text-decoration:none;
+  text-decoration:none;
 }
 body{
-background:#fff;
+  background:#fff;
 }
 *{
-font-family:"微软雅黑","宋体","sans-serif";
-}
-img{
-	border: none;
+  font-family:"寰蒋闆呴粦","瀹嬩綋",sans-serif;
 }

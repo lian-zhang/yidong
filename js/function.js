@@ -12,7 +12,6 @@
 */
  function getClass(classname,range){
  	  range=range||document;
-    // 三元表达式的方法
  	  // range=range?range:document;
  	  // range=range===undefined?document:range;
  	if(document.getElementsByClassName){
@@ -47,7 +46,7 @@
 
 
 
-/*$(selecter)  获取元素
+/*$(selecter)  (获取元素、设置元素)
  $(".one") 获取指定类名的元素
  $(".one") 获取指定id名的元素
  $(".one") 获取指定标签名名的元素
@@ -57,26 +56,26 @@
  4、获取元素
 */
 function $(selecter,range){
-  if(typeof  selecter=="function"){
+  if(typeof selecter=="function"){
     window.onload=function(){
       selecter();
     }
-  }
-  else if(typeof selecter=="string"){
+  }else if(typeof selecter=="string"){
    range=range||document;
    //不兼容trim
    selecter=selecter.trim();
    if(selecter.charAt(0)=="."){
-   	return getClass(selecter.substring(1),range);
+   	return getClass(selecter.substring(1));
    }else if(selecter.charAt(0)=="#"){
-   	return range.getElementById(selecter.substring(1),range);
+   	return range.getElementById(selecter.substring(1));
    }else if(/^[a-zA-Z][a-zA-Z1-6]{0,8}$/.test(selecter)){
-    return range.getElementsByTagName(selecter,range);
-   }else if(/^[a-zA-Z][a-zA-Z1-6]{0,8}>$/.test(selecter)){
-   return range.createElement(selecter.slice(1,-1));//$函数创建一个标签
+    return range.getElementsByTagName(selecter);
+   }else if(/^<[a-zA-Z][a-zA-Z1-6]{0,8}>$/.test(selecter)){
+    return document.createElement(selecter.slice(1,-1));
    }
+  }
 }
-}
+
 
 
 /*getContent(obj,value)  获取或者设置obj的文本
@@ -93,14 +92,14 @@ function getContent(obj,value){
   if(value){
      //设置
      if(obj.innerText){
-       obj.innerText=value;
-     }else{obj.textContent=value;
+       obj.innerText=value
+     }else{obj.textContent=value
       }
   }else{
      //获取
      if(obj.innerText){
-       return  obj.innerText;
-     }else{return  obj.textContent;
+       return  obj.innerText
+     }else{return  obj.textContent
       }
   }
 }
@@ -120,158 +119,176 @@ function getStyle(obj,attr){
   }
 }
 
-/*getchilds(obj,type) 获取指定对象的子元素集合
-obj (指定的对象)
-type：指定获取子元素节点的类型
-1.获取所有的子元素
-2.节点的类型
-true元素节点
-false元素节点和有意义的文本*/
 
+
+
+/*getChilds(obj,type)   获取指定对象的子元素集合
+obj  指定的对象
+type 指定获取子元素节点的类型
+   true 元素节点
+   false 元素节点和有意义的文本
+1、获取所有子元素
+2、节点类型1或有意义的节点和文本*/
 function getChilds(obj,type){
   type=type==undefined?true:type;
   var arr=[];
   var childs=obj.childNodes;
   if(type){
-    for(var i=0;i<childs.length;i++){
-    if(childs[i].nodeType==1){
+   for(var i=0;i<childs.length;i++){
+     if(childs[i].nodeType==1){
       arr.push(childs[i]);
-    }
-  }
-}else{ 
-  for(var i=0;i<childs.length;i++){
-    if(childs[i].nodeType==1||(childs[i].nodeType==3&&childs[i].nodeValue.replace(/^\s*|\s*$/g,""))){
+     }
+   }
+  }else{
+     for(var i=0;i<childs.length;i++){
+     if(childs[i].nodeType==1 || (childs[i].nodeType==3 && childs[i].nodeValue.replace(/^\s*|\s*$/g,""))){
       arr.push(childs[i]);
-
-    }
+     }
+   }
   }
-}
-return arr;
+  return arr;
 }
 
+
+//获取第一个子元素
 function firstChild(obj){
   return getChilds(obj)[0];
 }
 
+
+//获取最后一个子元素
 function lastChild(obj){
   var childs=getChilds(obj);
-  return childs[childs.length-1];
-} 
+  return childs[childs.length-1]
+}
+
+
+
+//获取任意一个子元素
 function randomChild(obj,num){
   var childs=getChilds(obj);
   return childs[num];
-} 
-// /*getNext(obj)获取obj的元素节点  
-// 1.先获取兄弟节点 next
-// 没有  false
-// 2.有
-// 判断兄弟节点 nodeType !=1
-//  next=next.next.Sibling
-//   next==null false
-//   重复 步骤2
-//  nodeType==1
-//  返回next
-
-
-
-// .
-// */
-// //插入到某个对象之后
-function getNext(obj,type){
-  type=type==undefined?true:type;
-  if(type){
-  var next=obj.nextSibling;
-  if(next==null){
-    return false
-  }while(next.nodeType !=1){
-    next=next.next.Sibling
-    if(next==null){
-    return false
-  }
-  }
- 
-}else if(type==false){
-  var next=obj.nextSibling;
-  if(next==null){
-    return false;
-  }while(!(next.nodeType==1||(next.nodeType==3&&next.nodeValue.replace(/^\s*|\s*$/g,"")))){
-    next=next.next.Sibling
-    if(next==null){
-    return false;
-  }
-  }
-
-} return next;
 }
-// //插入到最前面
-function getPrevious(obj,type){
-  type=type==undefined?true:type;
-  if(type){
-  var previous=obj.previousSibling;
-  if(previous==null){
-    return false
-  }while(previous.nodeType !=1){
-    previous=previous.previous.Sibling;
-    if(previous==null){
-    return false
-  }
-   return previous;
-  }
- 
-}else {
-  var previous=obj.previousSibling;
-  if(previous==null){
-    return false
-  }while(!(previous.nodeType==1||(previous.nodeType==3&&previous.nodeValue.replace(/^\s*|\s*$/g,"")))){
-    previous=previous.previous.Sibling
-    if(previous==null){
-    return false
-  }
-  return previous;
-  }
+/*
+ getNext(obj,type)  获取obj下一个元素节点
+ type 指定获取下一个元素节点的类型
+          true 元素节点
+          false 元素节点和有意义的文本
+ 1、先获取兄弟节点   没有 false
+ 2、有  判断兄弟节点nodeType!=1
+        next=next.nextSibling
+        next==null    false
+        重复 步2
+        nodeType==1  返回next
+*/
+// function  getNext(obj){
+//   var next=obj.nextSibling;
+//   if(next==null){
+//     return false;
+//   }while(next.nodeType==3||next.nodeType==8){
+//     next=next.nextSibling;
+//     if(next==null){
+//       return false;
+//     }
+//   }
+//   return next;
+// }
 
-} 
-} 
-// /*
-//   interAfter(newobj,obj,type)
-//   将newobj插入到obj后面
-//   newobj是要插入的元素
-//   obj插入的位置
-//   type插入的类型
-//   true 元素节点
-//   false 元素节点有意义的文本
-// 1.获取obj的下一个兄弟元素的next
-// 2.获取obj的父元素 parent
-// 3.next flase
-// parent.appendchild(newobj)
-// 4.parent.insertBefore(newobj,next);
-// */
 
-function interAfter(newobj,obj,type){
+function getNext(obj,type){
+   type==type==undefined?true:type;
+   if(type){
+    var next=obj.nextSibling;
+   if(next==null){
+    return false;
+   }
+   while(next.nodeType==3||next.nodeType==8){
+    next=next.nextSibling;
+    if(next==null){
+      return false;
+    }
+  }
+   return next;
+   }else if(type==false){
+    var next=obj.nextSibling;
+   if(next==null){
+    return false;
+   }
+   while(!(next.nodeType==1 || (next.nodeType==3 && next.nodeValue.replace(/^\s*|\s*$/g,"")))){
+    next=next.nextSibling;
+    if(next==null){
+      return false;
+    }
+ }
+  return next;
+   }
+}
+
+ // getNext(obj)  获取obj上一个元素节点
+// function  getPrevious(obj){
+//   var Previous=obj.previousSibling;
+//   if(Previous==null){
+//     return false;
+//   }while(Previous.nodeType==3||Previous.nodeType==8){
+//     Previous=Previous.previousSibling;
+//     if(Previous==null){
+//       return false;
+//     }
+//   }
+//   return Previous;
+// }
+
+
+
+// function getPrevious(obj,type){
+//   type=type==undefined?true:type;
+//   if(type){
+//     var previous=obj.previousSibling;
+//     if(previous==null){
+//        return false;
+//     }while(previous.nodeType==3||previous.nodeType==8){   
+//        previous=previous.nextSibling;
+//        if(previous==null){
+//           return false;
+//        }
+//     }
+//     return previous;
+//   }else(type==false){ 
+//     var previous=obj.previousSibling;  
+//     if(previous==null){
+//        return false;
+//     }while(previous.nodeType==1||(previous.nodeType==3&& previous.nodeValue.replace(/^\s*|\s*$/g,""))){   
+//        previous=previous.nextSibling;
+//        if(previous==null){
+//           return false;
+//        }
+//     }
+//     return previous;
+//   }
+// }
+
+
+
+/*
+  insertAfter(newobj,obj,type)
+  将newobj插入到obj后面
+  newobj   要插入的元素
+  obj      插入的位置
+  type     类型
+          true  元素节点
+          false 元素节点和有意义的文本
+  1、获取obj的下一个兄弟元素next
+  2、获取obj的父元素 parent
+  3、 next  false
+      parent.appendChild(newobj)
+  4、 parent.insertBefore(newobj,next);
+*/
+function insertAfter(newobj,obj,type){
   var next=getNext(obj,type);
   var parent=obj.parentNode;
   if(next){
-    parent.insertBefore(newobj,next)
+    parent.insertBefore(newobj,next);
   }else{
     parent.appendChild(newobj);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
